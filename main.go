@@ -53,6 +53,7 @@ func getSummary(a *session.API, id float64) (string, error) {
 		return "", errors.New("no match")
 	}
 	result := strings.ReplaceAll(tmpResult[1], `<br />`, "")
+	result = strings.ReplaceAll(result, "\r\n", "")
 	return result, nil
 }
 
