@@ -57,10 +57,22 @@ func getSummary(a *session.API, id float64) (string, error) {
 	return result, nil
 }
 
+func http2https(url string) string {
+	return strings.ReplaceAll(url, "http", "https")
+}
+
 func main() {
 	if len(os.Args) != 2 {
 		return
 	}
+	str := `---
+layout: bangumi
+title: bangumi
+comments: false
+date: 2019-02-10 21:32:48
+keywords:
+description:
+bangumis:` + "\n"
 	username := os.Args[1]
 	api := login.NoLogin().NewSession()
 	result, err := api.UserCollection(username, true, false)
@@ -69,17 +81,25 @@ func main() {
 	}
 	for _, item := range result {
 		subject := item["subject"].(map[string]interface{})
+		var (
+			img      = http2https(subject["images"].(map[string]interface{})["large"].(string))
+			title    = subject["name_cn"].(string)
+			progress = math.Floor((item["ep_status"].(float64) / subject["eps"].(float64)) * 100)
+			jp       = subject["name"].(string)
+			time     = fmt.Sprintf("%s %s", subject["air_date"].(string), convertWeekday(subject["air_weekday"].(float64)))
+		)
 		desc, err := getSummary(api, subject["id"].(float64))
 		if err != nil {
 			return
 		}
-		fmt.Println("中文名", subject["name_cn"].(string))
-		fmt.Println("日文名", subject["name"].(string))
-		fmt.Println("简介")
-		fmt.Println(desc)
-		fmt.Println("放送时间", fmt.Sprintf("%s %s", subject["air_date"].(string), convertWeekday(subject["air_weekday"].(float64))))
-		fmt.Println("图片url", subject["images"].(map[string]interface{})["large"].(string))
-		fmt.Println("进度", math.Floor((item["ep_status"].(float64)/subject["eps"].(float64))*100))
-		fmt.Println("-----------------------------------------------------------------------------")
+		str += fmt.Sprintf(`  - img: %s
+    title: %s
+    status: %s
+    progress: %.0f
+    jp: %s
+    time: %s
+    desc: %s`, img, title, strconv.FormatFloat(progress, 'f', 0, 64)+"%", progress, jp, time, desc) + "\n"
 	}
+	str += "---\n"
+	fmt.Println(str)
 }
