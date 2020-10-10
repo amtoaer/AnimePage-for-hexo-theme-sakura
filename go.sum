@@ -1,0 +1,4 @@
+github.com/amtoaer/bangumi v0.0.0-20201010110300-91904a38093e h1:RNoGCRLlYrQlFp5C8vyxufwqqEhCkJ2YQUo8UBaytj8=
+github.com/amtoaer/bangumi v0.0.0-20201010110300-91904a38093e/go.mod h1:ixbtbkmp7LPufJ8kUwkcFuFDubtDr7a36sceTSRfNS4=
+github.com/mitchellh/go-homedir v1.1.0 h1:lukF9ziXFxDFPkA1vsr5zpc1XuPDn/wFntq5mG+4E0Y=
+github.com/mitchellh/go-homedir v1.1.0/go.mod h1:SfyaCUpYCn1Vlf4IUYiD9fPX4A5wJrkLzIz1N1q0pr0=
