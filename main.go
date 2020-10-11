@@ -91,9 +91,23 @@ bangumis:` + "\n"
 	for _, item := range result {
 		subject := item["subject"].(map[string]interface{})
 		var (
+			total    float64
+			totalStr string
+		)
+		// 当前看到的集数
+		status := item["ep_status"].(float64)
+		// 如果该剧未完结，进度条显示为一半，总集数显示为??
+		if subject["eps"] == nil {
+			total = status * 2
+			totalStr = "??"
+		} else {
+			total = subject["eps"].(float64)
+			totalStr = fmt.Sprintf("%.0f", subject["eps"].(float64))
+		}
+		var (
 			img      = http2https(subject["images"].(map[string]interface{})["large"].(string))
 			title    = subject["name_cn"].(string)
-			progress = math.Floor((item["ep_status"].(float64) / subject["eps"].(float64)) * 100)
+			progress = math.Floor((status / total) * 100)
 			jp       = subject["name"].(string)
 			time     = fmt.Sprintf("%s %s", subject["air_date"].(string), convertWeekday(subject["air_weekday"].(float64)))
 		)
@@ -107,7 +121,7 @@ bangumis:` + "\n"
     progress: %.0f
     jp: %s
     time: %s
-    desc: %s`, img, title, strconv.FormatFloat(progress, 'f', 0, 64)+"%", progress, jp, time, desc) + "\n"
+    desc: %s`, img, title, fmt.Sprintf("%.0f/%s", status, totalStr), progress, jp, time, desc) + "\n"
 	}
 	str += "---\n"
 	// 将写入文件设置为函数，避免使用输出重定向时程序出错导致错误覆写
