@@ -111,5 +111,9 @@ bangumis:` + "\n"
 	}
 	str += "---\n"
 	// 将写入文件设置为函数，避免使用输出重定向时程序出错导致错误覆写
-	saveToFile(str)
+	err = saveToFile(str)
+	if err != nil {
+		fmt.Println("写入失败")
+	}
+	fmt.Println("写入成功")
 }
