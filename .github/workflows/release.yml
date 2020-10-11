@@ -17,7 +17,6 @@ jobs:
       - name: Build
         run: |
           GOOS=linux go build -ldflags "-w -s" -o release/GenerateAnimePage .
-          chmod +x release/GenerateAnimePage
       - name: Upload to release
         uses: softprops/action-gh-release@v1
         with:

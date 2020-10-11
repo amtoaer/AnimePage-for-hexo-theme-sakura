@@ -14,6 +14,7 @@ import (
 	"github.com/amtoaer/bangumi/session"
 )
 
+// 将1234567转换成对应的文字形式
 func convertWeekday(day float64) string {
 	switch day {
 	case 1:
@@ -52,13 +53,21 @@ func getSummary(a *session.API, id float64) (string, error) {
 	if len(tmpResult) < 2 {
 		return "", errors.New("no match")
 	}
+	// 去除html的<br />换行符
 	result := strings.ReplaceAll(tmpResult[1], `<br />`, "")
+	// 去除文本中自带的\r\n换行符
 	result = strings.ReplaceAll(result, "\r\n", "")
 	return result, nil
 }
 
 func http2https(url string) string {
+	// api返回的图片地址为http://...，通过该函数替换为https://...
 	return strings.ReplaceAll(url, "http", "https")
+}
+
+func saveToFile(str string) error {
+	// 将结果保存在当前目录的index.md文件夹内
+	return ioutil.WriteFile("index.md", []byte(str), os.FileMode(0644))
 }
 
 func main() {
@@ -101,5 +110,6 @@ bangumis:` + "\n"
     desc: %s`, img, title, strconv.FormatFloat(progress, 'f', 0, 64)+"%", progress, jp, time, desc) + "\n"
 	}
 	str += "---\n"
-	fmt.Println(str)
+	// 将写入文件设置为函数，避免使用输出重定向时程序出错导致错误覆写
+	saveToFile(str)
 }
