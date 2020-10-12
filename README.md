@@ -65,3 +65,14 @@ hexo generate
 
 之后每次进行博客更新时，云端部署都会自动更新你的番组页面。
 
+---
+
+如果你需要在没有博客更新的情况下对番组界面进行单独更新，可以为`vercel`/(`github actions`)加入`hook`，通过访问特定链接触发自动构建，具体流程为：
+
++ vercel
+
+  ![](img/VercelHook.png)
+
++ github actions
+
+  个人不太了解，请参考[官方文档](https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows)。
