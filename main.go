@@ -111,6 +111,9 @@ bangumis:` + "\n"
 			jp       = subject["name"].(string)
 			time     = fmt.Sprintf("%s %s", subject["air_date"].(string), convertWeekday(subject["air_weekday"].(float64)))
 		)
+		if title == "" {
+			title = jp
+		}
 		desc, err := getSummary(api, subject["id"].(float64))
 		if err != nil {
 			return
